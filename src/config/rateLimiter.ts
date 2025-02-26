@@ -1,7 +1,7 @@
 import * as Hapi from '@hapi/hapi';
-import { Options } from 'hapi-rate-limit';
+import { Options as RateLimitOptions, RateLimitResponseOptions } from 'hapi-rate-limit'; 
 
-export const rateLimiterOptions: Options = {
+export const rateLimiterOptions: RateLimitOptions = {
   enabled: process.env.NODE_ENV !== 'test',
   userLimit: parseInt(process.env.RATE_LIMIT_MAX || '100', 10),
   userCache: {
@@ -13,10 +13,12 @@ export const rateLimiterOptions: Options = {
   },
   headers: true,
   ipWhitelist: ['127.0.0.1'], // Allow unlimited requests from localhost/testing
-  trustProxy: true,
-  enableRateLimitHeaders: true,
   userAttribute: 'ip', // Use the client's IP address for rate limiting
-  limitExceededResponse: function (request, h, responseOptions) {
+  limitExceededResponse: function (
+    request: Hapi.Request, 
+    h: Hapi.ResponseToolkit, 
+    responseOptions: RateLimitResponseOptions
+  ) {
     return h.response({
       status: 'error',
       message: 'Too many requests, please try again later.',
@@ -28,17 +30,7 @@ export const rateLimiterOptions: Options = {
 export const registerRateLimiter = async (server: Hapi.Server): Promise<void> => {
   await server.register({
     plugin: require('hapi-rate-limit'),
-    options: {
-      ...rateLimiterOptions,
-      pathLimitPostOnly: true,
-      userPathLimit: false,
-      // Define specific path limits
-      pathLimits: [
-        { path: '/items', method: 'post', limit: parseInt(process.env.RATE_LIMIT_ITEMS_MODIFY || '20', 10) },
-        { path: '/items/{id}', method: 'put', limit: parseInt(process.env.RATE_LIMIT_ITEMS_MODIFY || '20', 10) },
-        { path: '/items/{id}', method: 'delete', limit: parseInt(process.env.RATE_LIMIT_ITEMS_MODIFY || '20', 10) }
-      ]
-    }
+    options: rateLimiterOptions
   });
   
   console.log('Rate limiting enabled with the following settings:');
