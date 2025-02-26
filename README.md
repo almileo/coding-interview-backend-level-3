@@ -1,43 +1,30 @@
-# Bienvenido al coding-interview-backend-level-3 - Parte I
+# El Dorado Item API
 
-## Descripción
-Eres el Senior Developer de tu equipo en El Dorado, y te han dado la responsabilidad de desarrollar un nuevo feature que nos pide el equipo de producto:
+A RESTful API for performing CRUD operations on `Item` entities, built with Hapi.js, TypeORM, and TypeScript.
 
-> API REST que permita realizar operaciones CRUD sobre una entidad de tipo `Item`.
->
-> La entidad tiene 3 campos: `id`, `name` y `price`.
->
->
+## Features
 
-# Requisitos:
-- Si el servicio se reinicia, los datos no se pueden perder.
-- Tienes que implementar tu codigo como si estuvieses haciendo un servicio para El Dorado listo para produccion.
-- Completar la implementación de toda la funcionalidad de forma tal de que los tests e2e pasen exitosamente.
+- Complete CRUD operations for Item entities (id, name, price)
+- Persistent data storage with TypeORM and SQLite
+- Input validation using Joi
+- API documentation with Swagger
+- Rate limiting for API protection
+- E2E tests
+- Postman collection for testing
 
+## Getting Started
 
-### Que puedes hacer: 
-- ✅ Modificar el código fuente y agregar nuevas clases, métodos, campos, etc.
-- ✅ Cambiar dependencias, agregar nuevas, etc.
-- ✅ Modificar la estructura del proyecto (/src/** es todo tuyo)
-- ✅ Elegir una base de datos
-- ✅ Elegir un framework web
-- ✅ Crear tests
-- ✅ Cambiar la definición del .devContainer
+### Prerequisites
 
+- Node.js (v14 or higher)
+- npm or yarn
+- VS Code with Remote - Containers extension (if using devcontainer)
 
-### Que **no** puedes hacer:
-- ❌ No puedes modificar el archivo original /e2e/index.test.ts (pero puedes crear otros test si lo deseas)
-- ❌ El proyecto debe usar Typescript 
-- ❌ Estresarte 🤗
+### Installation
 
+#### Option 1: Standard Setup
 
-## Pasos para comenzar
-1. Haz un fork usando este repositorio como template
-2. Clona el repositorio en tu máquina
-3. Realiza los cambios necesarios para que los tests pasen
-4. Sube tus cambios a tu repositorio
-5. Avísanos que has terminado
-6. ???
-7. PROFIT
-
-### Cualquier duda contactarme a https://www.linkedin.com/in/andreujuan/
+1. Clone the repository:
+```bash
+git clone <repository-url>
+cd <repository-folder>
