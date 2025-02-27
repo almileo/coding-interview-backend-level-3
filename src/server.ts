@@ -9,7 +9,7 @@ import { registerRateLimiter } from './config/rateLimiter';
 import 'dotenv/config';
 
 export const initializeServer = async (): Promise<Hapi.Server> => {
-  // Initialize database connection
+
   await initializeDatabase();
 
   const server = Hapi.server({
@@ -17,17 +17,40 @@ export const initializeServer = async (): Promise<Hapi.Server> => {
     host: process.env.HOST || 'localhost',
     routes: {
       cors: {
-        origin: ['*'] // For development - restrict in production
+        origin: ['*']
       },
       validate: {
-        failAction: async (request, h, err) => {
+        failAction: async (request, h, err: any) => {
+          if (err.isJoi && Array.isArray(err.details)) {
+            const errors = err.details.map((detail: any) => {
+              const path = detail.path || [];
+              const field = path[0] || 'unknown';
+
+              let message = detail.message || 'Invalid input';
+
+              if (field === 'price') {
+                if (message.includes('required')) {
+                  message = 'Field "price" is required';
+                } else if (message.includes('positive')) {
+                  message = 'Field "price" cannot be negative';
+                }
+              }
+
+              return { field, message };
+            });
+
+            return h.response({ errors }).code(400).takeover();
+          }
+
           if (process.env.NODE_ENV === 'production') {
-            // Production: Don't leak error details
-            throw new Error('Invalid request payload');
+            return h.response({
+              errors: [{ field: 'unknown', message: 'Invalid input data' }]
+            }).code(400).takeover();
           } else {
-            // Development: Log and respond with error details
-            console.error(err);
-            throw err;
+            console.warn('Error details:', err);
+            return h.response({
+              errors: [{ field: 'unknown', message: err.message || 'Validation error' }]
+            }).code(400).takeover();
           }
         }
       }
@@ -44,34 +67,58 @@ export const initializeServer = async (): Promise<Hapi.Server> => {
   const itemRepository = new ItemRepository();
   const itemService = new ItemService(itemRepository);
 
-  // Register routes
   await server.register(itemRoutes(itemService));
 
-  // Ping route to check server health
-  server.route({
-    method: 'GET',
-    path: '/ping',
-    options: {
-      description: 'Health check endpoint',
-      notes: 'Returns a simple response to verify the server is running',
-      tags: ['api', 'health'],
-      plugins: {
-        'hapi-swagger': {
-          responses: {
-            '200': {
-              description: 'Server is healthy',
-              schema: Joi.object({
-                ok: Joi.boolean().default(true)
-              }).label('HealthResponse')
+  server.route([
+    {
+      method: 'GET',
+      path: '/ping',
+      options: {
+        description: 'Health check endpoint',
+        notes: 'Returns a simple response to verify the server is running',
+        tags: ['api', 'health'],
+        plugins: {
+          'hapi-swagger': {
+            responses: {
+              '200': {
+                description: 'Server is healthy',
+                schema: Joi.object({
+                  ok: Joi.boolean().default(true)
+                }).label('HealthResponse')
+              }
             }
           }
         }
+      },
+      handler: () => {
+        return { ok: true };
       }
     },
-    handler: () => {
-      return { ok: true };
+    {
+      method: 'GET',
+      path: '/',
+      options: {
+        description: 'Root endpoint',
+        notes: 'Returns a simple welcome message',
+        tags: ['api', 'root'],
+        plugins: {
+          'hapi-swagger': {
+            responses: {
+              '200': {
+                description: 'Welcome message',
+                schema: Joi.object({
+                  message: Joi.string().default('Welcome to the API')
+                }).label('RootResponse')
+              }
+            }
+          }
+        }
+      },
+      handler: () => {
+        return { message: 'Welcome to the API' };
+      }
     }
-  });
+  ]);
 
   return server;
 };

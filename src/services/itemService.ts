@@ -24,7 +24,6 @@ export class ItemService {
     } else if (input.price < 0) {
       errors.push({ field: 'price', message: 'Field "price" cannot be negative' });
     }
-
     return errors;
   }
 

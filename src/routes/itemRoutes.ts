@@ -116,12 +116,6 @@ export const itemRoutes = (itemService: ItemService): Hapi.Plugin<void> => {
                 }
               },
               payloadType: 'form'
-            },
-            'hapi-rate-limit': {
-              pathLimit: parseInt(process.env.RATE_LIMIT_ITEMS_MODIFY || '20', 10),
-              pathCache: {
-                expiresIn: parseInt(process.env.RATE_LIMIT_WINDOW_MINUTES || '15', 10) * 60 * 1000
-              }
             }
           }
         },
@@ -131,6 +125,7 @@ export const itemRoutes = (itemService: ItemService): Hapi.Plugin<void> => {
           // Validate input
           const validationErrors = itemService.validateCreateItem(input);
           if (validationErrors.length > 0) {
+            console.log('ENTRE a VALIDATION ERRORS');
             return h.response({ errors: validationErrors }).code(400);
           }
           
@@ -179,12 +174,6 @@ export const itemRoutes = (itemService: ItemService): Hapi.Plugin<void> => {
                 }
               },
               payloadType: 'form'
-            },
-            'hapi-rate-limit': {
-              pathLimit: parseInt(process.env.RATE_LIMIT_ITEMS_MODIFY || '20', 10),
-              pathCache: {
-                expiresIn: parseInt(process.env.RATE_LIMIT_WINDOW_MINUTES || '15', 10) * 60 * 1000
-              }
             }
           }
         },
@@ -232,12 +221,6 @@ export const itemRoutes = (itemService: ItemService): Hapi.Plugin<void> => {
                 '429': {
                   description: 'Too Many Requests'
                 }
-              }
-            },
-            'hapi-rate-limit': {
-              pathLimit: parseInt(process.env.RATE_LIMIT_ITEMS_MODIFY || '20', 10),
-              pathCache: {
-                expiresIn: parseInt(process.env.RATE_LIMIT_WINDOW_MINUTES || '15', 10) * 60 * 1000
               }
             }
           }

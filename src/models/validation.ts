@@ -1,4 +1,3 @@
-// src/models/validation.ts
 import Joi from 'joi';
 
 export const itemSchemas = {

@@ -1,5 +1,12 @@
 declare module 'hapi-rate-limit' {
-    import { Plugin, ServerRegisterOptions } from '@hapi/hapi';
+    import { Plugin, Request, ResponseToolkit } from '@hapi/hapi';
+  
+    export interface RateLimitResponseOptions {
+      limit: number;
+      remaining: number;
+      reset: number;
+      exceeded: boolean;
+    }
   
     export interface Options {
       enabled?: boolean;
@@ -18,16 +25,13 @@ declare module 'hapi-rate-limit' {
       trustProxy?: boolean;
       enableRateLimitHeaders?: boolean;
       userAttribute?: string;
-      limitExceededResponse?: (request: any, h: any, responseOptions: any) => any;
+      limitExceededResponse?: (
+        request: Request, 
+        h: ResponseToolkit, 
+        responseOptions: RateLimitResponseOptions
+      ) => any;
     }
   
-    // Define it as a proper Hapi plugin
-    interface HapiRateLimitPlugin extends Plugin<Options> {
-      name: string;
-      version?: string;
-      multiple?: boolean;
-    }
-  
-    const hapiRateLimit: HapiRateLimitPlugin;
+    const hapiRateLimit: Plugin<Options>;
     export default hapiRateLimit;
   }
