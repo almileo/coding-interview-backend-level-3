@@ -1,0 +1,276 @@
+{
+    "info": {
+      "_postman_id": "b9e47d62-5aef-44e1-8f2a-e2d3f42e7c13",
+      "name": "Coding Interview Backend Level 3 by Leonardo Almiron API",
+      "description": "A collection for testing the Coding Interview Backend Level 3 by Leonardo Almiron, which provides CRUD operations for Item entities.",
+      "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "item": [
+      {
+        "name": "Health",
+        "description": "Health check endpoint to verify the API is running",
+        "item": [
+          {
+            "name": "Ping",
+            "request": {
+              "method": "GET",
+              "header": [],
+              "url": {
+                "raw": "{{baseUrl}}/ping",
+                "host": [
+                  "{{baseUrl}}"
+                ],
+                "path": [
+                  "ping"
+                ]
+              },
+              "description": "Checks if the API is running correctly"
+            },
+            "response": []
+          }
+        ]
+      },
+      {
+        "name": "Items",
+        "description": "CRUD operations for Item entities",
+        "item": [
+          {
+            "name": "Get All Items",
+            "request": {
+              "method": "GET",
+              "header": [],
+              "url": {
+                "raw": "{{baseUrl}}/items",
+                "host": [
+                  "{{baseUrl}}"
+                ],
+                "path": [
+                  "items"
+                ]
+              },
+              "description": "Returns a list of all items"
+            },
+            "response": []
+          },
+          {
+            "name": "Get Item by ID",
+            "request": {
+              "method": "GET",
+              "header": [],
+              "url": {
+                "raw": "{{baseUrl}}/items/{{itemId}}",
+                "host": [
+                  "{{baseUrl}}"
+                ],
+                "path": [
+                  "items",
+                  "{{itemId}}"
+                ]
+              },
+              "description": "Returns a specific item by its ID"
+            },
+            "response": []
+          },
+          {
+            "name": "Create Item",
+            "event": [
+              {
+                "listen": "test",
+                "script": {
+                  "exec": [
+                    "// Save the created item ID for subsequent requests",
+                    "if (pm.response.code === 201) {",
+                    "    var jsonData = pm.response.json();",
+                    "    pm.environment.set(\"itemId\", jsonData.id);",
+                    "}"
+                  ],
+                  "type": "text/javascript"
+                }
+              }
+            ],
+            "request": {
+              "method": "POST",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": {
+                "mode": "raw",
+                "raw": "{\n    \"name\": \"Test Item\",\n    \"price\": 29.99\n}"
+              },
+              "url": {
+                "raw": "{{baseUrl}}/items",
+                "host": [
+                  "{{baseUrl}}"
+                ],
+                "path": [
+                  "items"
+                ]
+              },
+              "description": "Creates a new item with the provided data"
+            },
+            "response": []
+          },
+          {
+            "name": "Update Item",
+            "request": {
+              "method": "PUT",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": {
+                "mode": "raw",
+                "raw": "{\n    \"name\": \"Updated Test Item\",\n    \"price\": 39.99\n}"
+              },
+              "url": {
+                "raw": "{{baseUrl}}/items/{{itemId}}",
+                "host": [
+                  "{{baseUrl}}"
+                ],
+                "path": [
+                  "items",
+                  "{{itemId}}"
+                ]
+              },
+              "description": "Updates an existing item with the provided data"
+            },
+            "response": []
+          },
+          {
+            "name": "Delete Item",
+            "request": {
+              "method": "DELETE",
+              "header": [],
+              "url": {
+                "raw": "{{baseUrl}}/items/{{itemId}}",
+                "host": [
+                  "{{baseUrl}}"
+                ],
+                "path": [
+                  "items",
+                  "{{itemId}}"
+                ]
+              },
+              "description": "Deletes an item by its ID"
+            },
+            "response": []
+          },
+          {
+            "name": "Create Item (Invalid - Negative Price)",
+            "request": {
+              "method": "POST",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": {
+                "mode": "raw",
+                "raw": "{\n    \"name\": \"Invalid Item\",\n    \"price\": -10.99\n}"
+              },
+              "url": {
+                "raw": "{{baseUrl}}/items",
+                "host": [
+                  "{{baseUrl}}"
+                ],
+                "path": [
+                  "items"
+                ]
+              },
+              "description": "Attempts to create an item with a negative price (should return an error)"
+            },
+            "response": []
+          },
+          {
+            "name": "Create Item (Invalid - Missing Price)",
+            "request": {
+              "method": "POST",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": {
+                "mode": "raw",
+                "raw": "{\n    \"name\": \"Incomplete Item\"\n}"
+              },
+              "url": {
+                "raw": "{{baseUrl}}/items",
+                "host": [
+                  "{{baseUrl}}"
+                ],
+                "path": [
+                  "items"
+                ]
+              },
+              "description": "Attempts to create an item without a price (should return an error)"
+            },
+            "response": []
+          }
+        ]
+      },
+      {
+        "name": "Documentation",
+        "description": "API documentation endpoints",
+        "item": [
+          {
+            "name": "API Documentation",
+            "request": {
+              "method": "GET",
+              "header": [],
+              "url": {
+                "raw": "{{baseUrl}}/api-docs",
+                "host": [
+                  "{{baseUrl}}"
+                ],
+                "path": [
+                  "api-docs"
+                ]
+              },
+              "description": "Returns the Swagger documentation UI"
+            },
+            "response": []
+          }
+        ]
+      }
+    ],
+    "event": [
+      {
+        "listen": "prerequest",
+        "script": {
+          "type": "text/javascript",
+          "exec": [
+            ""
+          ]
+        }
+      },
+      {
+        "listen": "test",
+        "script": {
+          "type": "text/javascript",
+          "exec": [
+            ""
+          ]
+        }
+      }
+    ],
+    "variable": [
+      {
+        "key": "baseUrl",
+        "value": "http://localhost:3000",
+        "type": "string"
+      },
+      {
+        "key": "itemId",
+        "value": "1",
+        "type": "string"
+      }
+    ]
+  }

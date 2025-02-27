@@ -1,12 +1,23 @@
+/** @type {import('jest').Config} */
 module.exports = {
-  preset: "@swc/jest",
-  testEnvironment: "node",
-  roots: ["<rootDir>/src", "<rootDir>/e2e"],
-  moduleFileExtensions: ["ts", "js", "json"],
-  setupFilesAfterEnv: ["<rootDir>/jest.setup.ts"],
-  testMatch: ["**/e2e/**/*.test.ts"],
-  verbose: true,
-  clearMocks: true,
-  resetMocks: true,
-  testTimeout: 10000,
+  testEnvironment: 'node',
+  testMatch: ['**/e2e/**/*.test.ts'],
+  transform: {
+    '^.+\\.(t|j)sx?$': ['@swc/jest', {
+      jsc: {
+        parser: {
+          syntax: 'typescript',
+          decorators: true,
+        },
+        target: 'es2019',
+        keepClassNames: true,
+        transform: {
+          legacyDecorator: true,
+          decoratorMetadata: true,
+        },
+      },
+    }],
+  },
+  moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],
+  setupFilesAfterEnv: ['./jest.setup.ts'],
 };
