@@ -1,8 +1,24 @@
-// See https://containers.dev/implementors/json_reference/ for configuration reference
 {
-	"name": "Coding Interview Backend Level 3",
-	"build": {
-		"dockerfile": "Dockerfile"
-	},
-  "remoteUser": "node"
+  "name": "Coding Interview Leonardo Almiron CRUD API Development",
+  "dockerFile": "Dockerfile",
+  "forwardPorts": [3000, 6379],
+  "settings": {
+    "terminal.integrated.shell.linux": "/bin/bash",
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "extensions": [
+    "dbaeumer.vscode-eslint",
+    "esbenp.prettier-vscode",
+    "ms-vscode.vscode-typescript-tslint-plugin",
+    "mikestead.dotenv",
+    "christian-kohler.path-intellisense",
+    "ms-azuretools.vscode-docker"
+  ],
+  "postCreateCommand": "npm install",
+  "remoteUser": "node",
+  "containerEnv": {
+    "REDIS_URL": "redis://localhost:6379",
+    "CACHE_ENABLED": "true"
+  }
 }
