@@ -9,8 +9,8 @@ export const swaggerOptions: HapiSwagger.RegisterOptions = {
     version: '1.0.0',
     description: 'API for managing items with CRUD operations',
     contact: {
-      name: 'El Dorado Tech Team',
-      email: 'tech@eldorado.com'
+      name: 'Leonardo Almiron',
+      email: 'almiron.leonardo@gmail.com'
     }
   },
   grouping: 'tags',

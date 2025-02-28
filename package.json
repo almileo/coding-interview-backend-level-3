@@ -41,7 +41,7 @@
     "joi": "^17.11.0",
     "redis": "^4.6.7",
     "reflect-metadata": "^0.1.13",
-    "sqlite3": "^5.1.6",
+    "sqlite3": "^5.1.7",
     "typeorm": "^0.3.17"
   }
 }
